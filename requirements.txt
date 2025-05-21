@@ -1,3 +1,4 @@
+annotated-types==0.7.0
 anyio==4.9.0
 appnope==0.1.4
 argon2-cffi==23.1.0
@@ -11,6 +12,7 @@ beautifulsoup4==4.13.4
 bleach==6.2.0
 certifi==2025.4.26
 cffi==1.17.1
+chardet==5.2.0
 charset-normalizer==3.4.2
 cloudpickle==3.1.1
 comm==0.2.2
@@ -19,15 +21,21 @@ cycler==0.12.1
 debugpy==1.8.14
 decorator==5.2.1
 defusedxml==0.7.1
+distro==1.9.0
+dnspython==2.7.0
+dotenv==0.9.9
 executing==2.2.0
 fastjsonschema==2.21.1
 filelock==3.18.0
 fonttools==4.58.0
 fqdn==1.5.1
 fsspec==2025.3.2
+future==1.0.0
+gutenbergpy==0.3.5
 h11==0.16.0
 hf-xet==1.1.1
 httpcore==1.0.9
+httpsproxy_urllib2==1.0
 httpx==0.28.1
 huggingface-hub==0.31.1
 idna==3.10
@@ -38,6 +46,7 @@ ipywidgets==8.1.7
 isoduration==20.11.0
 jedi==0.19.2
 Jinja2==3.1.6
+jiter==0.10.0
 joblib==1.5.0
 json5==0.12.0
 jsonpointer==3.0.0
@@ -57,6 +66,7 @@ jupyterlab_server==2.27.3
 jupyterlab_widgets==3.0.15
 kiwisolver==1.4.8
 llvmlite==0.44.0
+lxml==5.4.0
 MarkupSafe==3.0.2
 matplotlib==3.10.3
 matplotlib-inline==0.1.7
@@ -69,6 +79,7 @@ notebook==7.4.2
 notebook_shim==0.2.4
 numba==0.61.2
 numpy==2.2.5
+openai==1.79.0
 overrides==7.7.0
 packaging==25.0
 pandas==2.2.3
@@ -83,10 +94,14 @@ psutil==7.0.0
 ptyprocess==0.7.0
 pure_eval==0.2.3
 pycparser==2.22
+pydantic==2.11.4
+pydantic_core==2.33.2
 Pygments==2.19.1
+pymongo==4.13.0
 pynndescent==0.5.13
 pyparsing==3.2.3
 python-dateutil==2.9.0.post0
+python-dotenv==1.1.0
 python-json-logger==3.3.0
 pytz==2025.2
 PyYAML==6.0.2
@@ -118,6 +133,7 @@ tqdm==4.67.1
 traitlets==5.14.3
 transformers==4.51.3
 types-python-dateutil==2.9.0.20241206
+typing-inspection==0.4.0
 typing_extensions==4.13.2
 tzdata==2025.2
 umap-learn==0.5.7
