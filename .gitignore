@@ -1,2 +1,3 @@
 .venv/
-.envData/excerpts_df.parquet
+.env
+Data/excerpts_df.parquet
