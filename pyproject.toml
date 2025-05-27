@@ -7,7 +7,7 @@ authors = [
 ]
 license = {text = "MIT"}
 readme = "README.md"
-requires-python = "^3.11"
+requires-python = ">=3.11,<3.14"
 dependencies = [
     "annotated-types (==0.7.0)",
     "anyio (==4.9.0)",
@@ -157,7 +157,8 @@ dependencies = [
     "webencodings (==0.5.1)",
     "websocket-client (==1.8.0)",
     "widgetsnbextension (==4.0.14)",
-    "nltk (>=3.9.1,<4.0.0)"
+    "nltk (>=3.9.1,<4.0.0)",
+    "spacy (>=3.8.7,<4.0.0)"
 ]
 
 [tool.poetry]
