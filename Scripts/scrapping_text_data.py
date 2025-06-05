@@ -1,32 +1,32 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# # Collecting Texts from authors
+# ===============================
+# Collecting texts from authors
+# ===============================
 
-# **The aim of this notebook is to scrape the text data needed for this project.**
+# The aim of this script is to scrape the text data needed for this project.
 # 
 # The research area of this project focuses on the novels of well-known French authors of the 19th and 20th centuries.
 # 
-# For each author selected, this notebook will scrape excerpts of around 2,000 words from all their novels available in French on The Gutenberg Project - a vast collection of free ebooks.
+# For each author selected, this script will scrape excerpts of around 2,000 words from all their novels available in French on The Gutenberg Project - a vast collection of free ebooks.
 # 
-# A list of authors corresponding to the above criteria has been drawn up in advance, based on sources such as the Universal Encyclopaedia. This list corresponds to ***authors.csv***.
+# A list of authors corresponding to the above criteria has been drawn up in advance, based on sources such as the Universal Encyclopaedia. This list corresponds to authors.csv.
 # 
-# The first part of this notebook - **listing usable novels** - will consist in the creation of 2 new files:
-# - ***books.csv***: a database containing a list of novels that can be found in French on Project Gutenberg for each author, with metadata for each book srapped from the Project Gutenberg site or labeled by an LLM.
-# - ***final_authors.csv***: a database updating the list of authors according to the accessibility of their works on the Project Gutenberg website and with labels taken from those of books.csv
-# 
-# The second part of this notebook - **scraping excerpts** - will consist in the creation of ***excerpts.parquet***, a database containing the clean excerpts (no title, no headings, no pre/post formating parts) labeled with the author and the novel its from. ***final_authors.csv*** is also update with information about the number of excerpts that were successfully scrapped.
+# This scripts consists in the creation of 3 new files:
+# - books.csv: a database containing a list of novels that can be found in French on Project Gutenberg for each author, with metadata for each book srapped from the Project Gutenberg site or labeled by an LLM.
+# - excerpts.parquet: a database containing the clean excerpts (no title, no headings, no pre/post formating parts) labeled with the author and the novel its from. This database is created from the books.csv database.
+# - final_authors.csv: a database updating the list of authors according to the accessibility of their works on the Project Gutenberg website and with labels taken from those of books.csv + information about the number of excerpts that were successfully scrapped.
 # 
 # Note that to run the parts that include LLM labeling, a .env file with an openai api key is required.
 # 
 # May 2025 - Hadrien Strichard
 
-# In[57]:
 
+# -- Importing libraries --
 
 import pandas as pd
 import matplotlib.pyplot as plt
-
 import requests # for web scraping
 from bs4 import BeautifulSoup # for web scraping
 import os
@@ -37,41 +37,14 @@ import json
 from tqdm import tqdm # for progress bar
 
 
-# ## Part 1 : Listing usable novels
 
-# ### Loading the list of potential authors
-
-# In[4]:
-
-
-# Read authors.csv 
-authors_df = pd.read_csv('../Data/authors.csv', delimiter=';', encoding='MacRoman')
-
-# Correcting the column names and formats
-authors_df['birth_date'] = pd.to_datetime(authors_df['Année de naissance'], format='%Y')
-authors_df['death_date'] = pd.to_datetime(authors_df['Année de mort'], format='%Y')
-authors_df.rename(columns={'Nom': 'Name'}, inplace=True)
-authors_df.drop(['Année de naissance', 'Année de mort'], axis=1, inplace=True)
-
-authors_df.head()
+# ===============================
+# Part 1: Listing usable novels
+# ===============================
+# This part defines function that results in the creation of books.csv and final_authors.csv
 
 
-# In[5]:
-
-
-authors_df.info()
-
-
-# The missing values in the death_date columns are due to some authors in the list being still alive
-
-# ### Defining required functions
-
-# NB : Each function was tested with a few authors, Marcel Proust is here always taken as example.
-
-# **1. Getting a list of books for an author**
-
-# In[6]:
-
+# -- 1. Getting a list of books for an author --
 
 def search_books_by_author(author_name):
     """
@@ -90,7 +63,6 @@ def search_books_by_author(author_name):
 
     books = []
     
-    print(f"Searching for books by {author_name}...")
 
     while True:
         response = requests.get(search_url)
@@ -112,18 +84,7 @@ def search_books_by_author(author_name):
     return books
 
 
-# In[7]:
-
-
-# Testing search_books_by_author()
-
-print(len(search_books_by_author('Marcel Proust')))
-print(search_books_by_author('Marcel Proust'))
-
-
-# **2. Labelling and scrapping metadata about each book**
-
-# In[8]:
+# -- 2. Labelling and scrapping metadata about each book --
 
 
 def normalize_author(raw_author):
@@ -170,12 +131,7 @@ def normalize_author(raw_author):
     return f"{firstname} {lastname}"
 
 
-# In[9]:
-
-
-client = openai.OpenAI()  # client par défaut, utilisera ta clé dans l'env var OPENAI_API_KEY
-
-def label_book_with_llm(title, author):
+def label_book_with_llm(title, author, client):
     
     """
     Use a lightweight OpenAI language model to label a book with metadata.
@@ -297,18 +253,8 @@ def label_book_with_llm(title, author):
         }
 
 
-# In[10]:
 
-
-# Testing label_book_with_llm()
-
-label_book_with_llm("A la recherche du temps perdu v1 - Du Côté de chez Swann", "Marcel Proust")
-
-
-# In[11]:
-
-
-def extract_metadata(book_list):
+def extract_metadata(book_list, client):
     
     """
     Extract metadata from a list of Project Gutenberg book URLs,
@@ -369,7 +315,7 @@ def extract_metadata(book_list):
 
         # Vérifie que les champs requis sont présents avant d'appeler le LLM
         if data["Author"] and data["Title"]:
-            llm_result = label_book_with_llm(data["Title"], data["Author"])
+            llm_result = label_book_with_llm(data["Title"], data["Author"], client)
             data["Roman"] = llm_result.get("roman")
             data["Genres"] = ", ".join(llm_result.get("genre", []))
             data["Mouvement"] = ", ".join(llm_result.get("mouvement", []))
@@ -380,19 +326,7 @@ def extract_metadata(book_list):
     df = pd.DataFrame(metadata)
     return df
 
-
-# In[12]:
-
-
-# Testing extract_metadata()
-
-extract_metadata(search_books_by_author('Marcel Proust'))
-
-
-# **3. Filtering the books to match project's criterion**
-
-# In[28]:
-
+# -- 3. Filtering the books to match project's criterion --
 
 def filter_metadata(df, target_author):
     """
@@ -428,20 +362,9 @@ def filter_metadata(df, target_author):
     return df.reset_index(drop=True)
 
 
-# In[14]:
+# 4. -- Regrouping every function in one get method --
 
-
-# Testing filter_metadata()
-
-filter_metadata(extract_metadata(search_books_by_author('Marcel Proust')), 'Marcel Proust')
-
-
-# **4. Regrouping every function in one get method**
-
-# In[15]:
-
-
-def get_books(author):
+def get_books(author, client):
     """
     Get a list of labeled books by a specific author from Project Gutenberg.
 
@@ -452,72 +375,9 @@ def get_books(author):
     - pd.DataFrame: A DataFrame containing the filtered metadata for the author's books.
     """
     
-    return filter_metadata(extract_metadata(search_books_by_author(author)), author)
+    return filter_metadata(extract_metadata(search_books_by_author(author), client), author)
 
-
-# ### Creating books.csv and final_authors.csv
-
-# **1. Generating books_df**
-
-# In[32]:
-
-
-# /!\ This function will take a long time to run, as it scrapes the web and calls the LLM for each book.
-
-books_list = []
-count = 1
-
-for author in authors_df["Name"]:
-#    if count > 34:     Limit to the first 34 authors for testing
-#        break
-    print(f'Author {count} out of {len(authors_df)}')
-    df = get_books(author)
-    if not df.empty:
-        books_list.append(df)
-        print(f"n available books for {author} = {len(df)}")
-    else:
-        print(f"No available book for {author}")
-    count += 1
-
-books_df = pd.concat(books_list, ignore_index=True)
-
-
-# In[33]:
-
-
-books_df.head()
-
-
-# In[34]:
-
-
-books_df.info()
-
-
-# **2. Updating the list of authors**
-# 
-# 
-
-# In[35]:
-
-
-# 1. Keep only authors who have at least one valid novel in books_df
-valid_authors = books_df["Author"].unique()
-final_authors_df = authors_df[authors_df["Name"].isin(valid_authors)].copy()
-
-# 2. Add 'n_books' column: count of valid novels per author
-book_counts = books_df["Author"].value_counts().rename("n_books")
-final_authors_df = final_authors_df.merge(book_counts, how="left", left_on="Name", right_index=True)
-
-# 3. Add 'Mouvement' column: most frequent literary movement across the author's books
-dominant_movement = (
-    books_df.groupby("Author")["Mouvement"]
-    .agg(lambda x: pd.Series(x).mode()[0] if not pd.Series(x).mode().empty else None)
-    .rename("Mouvement")
-)
-final_authors_df = final_authors_df.merge(dominant_movement, how="left", left_on="Name", right_index=True)
-
-# 4. Add 'Genres' column: unique, deduplicated genres across all books of the author
+# This function is used to extract unique genres from a series of genre strings and is used in the final authors dataframe creation.
 def unique_genres(genres_series):
     genres = set()
     for entry in genres_series:
@@ -525,46 +385,15 @@ def unique_genres(genres_series):
             genres.update(g.strip() for g in entry.split(","))
     return ", ".join(sorted(genres))
 
-author_genres = (
-    books_df.groupby("Author")["Genres"]
-    .agg(unique_genres)
-    .rename("Genres")
-)
-final_authors_df = final_authors_df.merge(author_genres, how="left", left_on="Name", right_index=True)
-
-# 5. Reset index to clean up after filtering
-final_authors_df.reset_index(drop=True, inplace=True)
 
 
-# In[36]:
 
+# ===============================
+# Part 2: Scrapping excerpts
+# ===============================
+# Defining functions to scrape and process a raw text into clean regular excerpts
 
-final_authors_df.head()
-
-
-# In[37]:
-
-
-final_authors_df.info()
-
-
-# **3. Save books_df and final_authors_df**
-
-# In[38]:
-
-
-books_df.to_csv("../Data/books.csv", index=False)
-final_authors_df.to_csv("../Data/final_authors.csv", index=False)
-
-
-# ## Part 2: Scrapping excerpts
-
-# ### Defining functions to scrape and process a raw text into clean regular excerpts
-
-# **1. Scrapping a raw text**
-
-# In[89]:
-
+# -- 1. Scrapping a raw text --
 
 def get_gutenberg_text_url(book_page_url):
     """
@@ -604,21 +433,7 @@ def download_gutenberg_text(book_page_url):
     response.encoding = 'utf-8'  # Ensure proper decoding
     return response.text
 
-
-# In[90]:
-
-
-# Testing download_gutenberg_text()
-
-book_url = "https://www.gutenberg.org/ebooks/18083"
-text_content = download_gutenberg_text(book_url)
-print(text_content[:2000]) 
-
-
-# **2. Cleaning text from headers, titles, etc.**
-
-# In[91]:
-
+# -- 2. Cleaning text from headers, titles, etc. --
 
 def normalize_text(text):
     """Normalize accents and case for comparison."""
@@ -689,19 +504,7 @@ def clean_gutenberg_text(raw_text):
 
     return '\n\n'.join(cleaned_paragraphs)
 
-
-# In[92]:
-
-
-# Testing clean_gutenberg_text()
-cleaned_text = clean_gutenberg_text(text_content)
-print(cleaned_text)
-
-
-# **3. Paragraph segmentation**
-
-# In[93]:
-
+# -- 3. Paragraph segmentation --
 
 def segment_into_paragraphs(text):
     """
@@ -719,22 +522,7 @@ def segment_into_paragraphs(text):
     # Strip whitespace and remove any completely empty results
     return [p.strip() for p in paragraphs if p.strip()]
 
-
-
-# In[94]:
-
-
-# Testing split_into_clean_paragraphs()
-cleaned_paragraphs = segment_into_paragraphs(cleaned_text)
-print(len(cleaned_paragraphs))
-print(cleaned_paragraphs[0])
-print(cleaned_paragraphs[-1])
-
-
-# **4. From paragraphs to excerpts**
-
-# In[95]:
-
+# -- 4. From paragraphs to excerpts --
 
 def create_excerpts_by_paragraphs(paragraphs, target_word_count=1500, tolerance=0.1):
     """
@@ -774,21 +562,7 @@ def create_excerpts_by_paragraphs(paragraphs, target_word_count=1500, tolerance=
 
     return excerpts
 
-
-# In[96]:
-
-
-# Testing build_text_excerpts()
-excerpts = create_excerpts_by_paragraphs(cleaned_paragraphs)
-print(f"Number of excerpts: {len(excerpts)}")
-print(f"Excerpt 1:\n{excerpts[0]}")
-print(len(excerpts[0].split()))
-
-
-# **5. Regroup in one pipeline method**
-
-# In[97]:
-
+# -- 5. Regroup in one pipeline method --
 
 def process_gutenberg_book(book_page_url, target_words=1500, tolerance=0.1):
     """
@@ -810,25 +584,7 @@ def process_gutenberg_book(book_page_url, target_words=1500, tolerance=0.1):
 
     return excerpts
 
-
-# In[98]:
-
-
-# Testing process_gutenberg_book()
-book_processed = process_gutenberg_book(book_url)
-print(f"Number of excerpts: {len(book_processed)}")
-print(f"Excerpt 1:\n{book_processed[0]}")
-print(f"Word count in excerpt 1: {len(book_processed[0].split())}")
-
-
-# ### Scrapping and processing every book in the books_dataset and saving resulting datasets
-
-# In[99]:
-
-
-# Defining needed functions for dataframes creation and processing
-
-tqdm.pandas()
+# -- 6. Defining needed functions for dataframes creation and processing --
 
 def build_excerpt_dataset(books_df):
     """
@@ -881,68 +637,78 @@ def update_author_excerpt_counts(excerpt_df, final_authors_df):
     return updated_authors_df
 
 
-# In[100]:
+
+# =================================================================
 
 
-# Step 1: Process all books into excerpt-level dataset
-excerpts_df = build_excerpt_dataset(books_df)
+def main():
+    """
+    Main function to run the script.
+    """
+    # -- 1. Load authors data --
+    authors_df = pd.read_csv('../Data/authors.csv', delimiter=';', encoding='MacRoman')
+    authors_df['birth_date'] = pd.to_datetime(authors_df['Année de naissance'], format='%Y')
+    authors_df['death_date'] = pd.to_datetime(authors_df['Année de mort'], format='%Y')
+    authors_df.rename(columns={'Nom': 'Name'}, inplace=True)
+    authors_df.drop(['Année de naissance', 'Année de mort'], axis=1, inplace=True)
+    # Note: some authors are still alive, hence missing death_date values
+    
+    # -- 2. Creating books.csv and final_authors.csv --
+    # /!\ This part takes a long time to run, as it scrapes the web and calls the LLM for each book.
+    
+    client = openai.OpenAI() # Ensure OpenAI client is initialized if using LLM labeling
 
-# Step 2: Update authors dataset with excerpt counts
-updated_authors_df = update_author_excerpt_counts(excerpts_df, final_authors_df)
+    # Scraping books for each author from Project Gutenberg and creating a dataframe with the metadata of each book out of it
+    books_list = []
+    for author in authors_df["Name"]:
+        df = get_books(author, client) 
+        if not df.empty:
+            books_list.append(df)
+    books_df = pd.concat(books_list, ignore_index=True)
 
-# Step 3: Save to Data folder
-excerpts_df.to_parquet("../Data/excerpts_df.parquet", index=False)
-updated_authors_df.to_csv("../Data/final_authors.csv", index=False)
+    # Keep only authors who have at least one valid novel in books_df
+    valid_authors = books_df["Author"].unique()
+    final_authors_df = authors_df[authors_df["Name"].isin(valid_authors)].copy()
 
-print("✅ Done: Excerpts dataset and author metadata updated and saved.")
+    # Add 'n_books' column: count of valid novels per author
+    book_counts = books_df["Author"].value_counts().rename("n_books")
+    final_authors_df = final_authors_df.merge(book_counts, how="left", left_on="Name", right_index=True)
 
+    # Add 'Mouvement' column: most frequent literary movement across the author's books
+    dominant_movement = (
+        books_df.groupby("Author")["Mouvement"]
+        .agg(lambda x: pd.Series(x).mode()[0] if not pd.Series(x).mode().empty else None)
+        .rename("Mouvement")
+    )
+    final_authors_df = final_authors_df.merge(dominant_movement, how="left", left_on="Name", right_index=True)
 
-# In[101]:
+    # Add 'Genres' column: most frequent literary genres across the author's books
+    author_genres = (
+        books_df.groupby("Author")["Genres"]
+        .agg(unique_genres)
+        .rename("Genres")
+    )
+    final_authors_df = final_authors_df.merge(author_genres, how="left", left_on="Name", right_index=True)
 
+    # Reset index to clean up after filtering
+    final_authors_df.reset_index(drop=True, inplace=True)
 
-excerpts_df.head()
+    # Save books_df and final_authors_df
+    books_df.to_csv("../Data/books.csv", index=False)
+    final_authors_df.to_csv("../Data/final_authors.csv", index=False)
+    
+    # -- 3. Creating excerpts.parquet and updating final_authors.csv --
+    
+    tqdm.pandas()
+    # Step 1: Process all books into excerpt-level dataset
+    excerpts_df = build_excerpt_dataset(books_df)
 
+    # Step 2: Update authors dataset with excerpt counts
+    updated_authors_df = update_author_excerpt_counts(excerpts_df, final_authors_df)
 
-# In[102]:
+    # Step 3: Save to Data folder
+    excerpts_df.to_parquet("../Data/excerpts_df.parquet", index=False)
+    updated_authors_df.to_csv("../Data/final_authors.csv", index=False)
 
-
-excerpts_df.info()
-
-
-# In[103]:
-
-
-updated_authors_df.head()
-
-
-# In[104]:
-
-
-updated_authors_df.info()
-
-
-# In[105]:
-
-
-print(updated_authors_df['n_excerpts'].describe())
-
-
-# In[106]:
-
-
-plt.figure(figsize=(8, 5))
-plt.hist(updated_authors_df["n_excerpts"], bins=100, edgecolor='black')
-plt.title("Distribution of Number of Excerpts per Author")
-plt.xlabel("Number of Excerpts")
-plt.ylabel("Number of Authors")
-plt.grid(axis='y', linestyle='--', alpha=0.7)
-plt.tight_layout()
-plt.show()
-
-
-# In[107]:
-
-
-print(len(updated_authors_df))
-print(updated_authors_df[['Name', 'n_excerpts']].sort_values(by='n_excerpts', ascending=True))
-
+if __name__ == "__main__":
+    main()
