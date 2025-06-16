@@ -160,7 +160,8 @@ dependencies = [
     "nltk (>=3.9.1,<4.0.0)",
     "spacy (>=3.8.2,<4.0.0)",
     "boruta (>=0.4.3,<0.5.0)",
-    "freestylo (>=0.8.3,<0.9.0)"
+    "freestylo (>=0.8.3,<0.9.0)",
+    "statsmodels (>=0.14.4,<0.15.0)"
 ]
 
 [tool.poetry]
