@@ -1,5 +1,20 @@
-.venv/
-.env #API keys
-Data/excerpts_df.parquet   #Data file
+# 🔐 Credentials / environment variables
+.env
+
+# 📦 Data files
+Data/*.parquet
+
+# 🧠 Trained models
+Models/
+
+# 🍎 macOS system files
 .DS_Store
-'HEC Paris - Research Paper - Guidelines Data Science & AI for Business 2425 (1).pdf'
+
+# 🧾 External documents
+*.pdf
+*.docx
+*.python-version
+
+# 🧪 Logs, intermediate results
+Notebooks/*.log
+Notebooks/*.csv  # if you only store outputs here, otherwise be more specific
