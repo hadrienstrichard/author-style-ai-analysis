@@ -17,4 +17,4 @@ Models/
 
 # 🧪 Logs, intermediate results
 Notebooks/*.log
-Notebooks/*.csv  # if you only store outputs here, otherwise be more specific
+Notebooks/*.csv
