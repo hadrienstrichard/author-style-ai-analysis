@@ -42,7 +42,7 @@ dependencies = [
     "filelock (==3.18.0)",
     "fonttools (==4.58.0)",
     "fqdn (==1.5.1)",
-    "fsspec (==2025.3.2)",
+    "fsspec (==2025.3.0)",
     "future (==1.0.0)",
     "gutenbergpy (==0.3.5)",
     "h11 (==0.16.0)",
@@ -164,7 +164,11 @@ dependencies = [
     "tabulate (>=0.9.0,<0.10.0)",
     "matplotlib (>=3.10.3,<4.0.0)",
     "xgboost (>=3.0.2,<4.0.0)",
-    "lightgbm (>=4.6.0,<5.0.0)"
+    "lightgbm (>=4.6.0,<5.0.0)",
+    "sentence-transformers (>=4.1.0,<5.0.0)",
+    "datasets (>=3.6.0,<4.0.0)",
+    "evaluate (>=0.4.4,<0.5.0)",
+    "protobuf (>=6.31.1,<7.0.0)"
 ]
 
 [tool.poetry]
