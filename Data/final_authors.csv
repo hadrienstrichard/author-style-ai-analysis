@@ -1,29 +1,29 @@
-Name,birth_date,death_date,n_books,Mouvement,Genres,n_excerpts
-Charles Nodier,1780-01-01,1844-01-01,2,Romantisme,"Fantastique, Gothique, Historique, Romantique",38
-Stendhal,1783-01-01,1842-01-01,6,Réalisme,"Amour, Analyse, Aventure, Historique",315
-Alfred de Vigny,1797-01-01,1863-01-01,3,Romantisme,"Amour, Analyse, Aventure, Historique",121
-Honoré de Balzac,1799-01-01,1850-01-01,16,Réalisme,"Amour, Analyse, Autobiographique / Autofiction, Historique, Satirique, Scènes de la vie de Province, Scènes de la vie de campagne, Scènes de la vie militaire, Scènes de la vie parisienne, Scènes de la vie politique",1760
-Alexandre Dumas,1802-01-01,1870-01-01,18,inclassable,"Amour, Aventure, Fantaisie, Historique",841
-Victor Hugo,1802-01-01,1885-01-01,13,Réalisme,"Amour, Analyse, Autobiographique / Autofiction, Aventure, Gothique, Historique, Satirique",720
-Prosper Mérimée,1803-01-01,1870-01-01,4,inclassable,"Amour, Fantastique, Historique, Épistolaire",119
-George Sand,1804-01-01,1876-01-01,55,Romantisme,"Amour, Analyse, Autobiographique / Autofiction, Bildungsroman, Biographique / Exofiction, Fantastique, Historique, Légendes, Musique, Nature, Rustiques",2566
-Paul Féval,1816-01-01,1887-01-01,26,inclassable,"Amour, Autobiographique / Autofiction, Aventure, Fantastique, Gothique, Historique, Policier / Polar",797
-Gustave Flaubert,1821-01-01,1880-01-01,9,Réalisme,"Amour, Analyse, Autobiographique / Autofiction, Bildungsroman, Fantastique, Historique, Philosophique, Realism, Religieux, Satirique",431
-Jules Verne,1828-01-01,1905-01-01,34,inclassable,"Aventure, Historique, Satirique, Science-Fiction, Voyage",1695
-Ponson du Terrail,1829-01-01,1871-01-01,10,inclassable,"Amour, Aventure, Historique, Policier / Polar",250
-Jules Vallès,1832-01-01,1885-01-01,2,Réalisme,"Analyse, Autobiographique / Autofiction",100
-Alphonse Daudet,1840-01-01,1897-01-01,8,Réalisme,"Amour, Autobiographique / Autofiction, Aventure, Contes, Historique, Satirique",276
-Émile Zola,1840-01-01,1902-01-01,23,"Réalisme, Naturalism","Amour, Analyse, Autobiographique / Autofiction, Drame, Guerre, Historique, Naturalism, Naturalisme, Policier / Polar, Psychologique, Roman, Réalisme, Satirique, Érotique",1811
-Anatole France,1844-01-01,1924-01-01,12,inclassable,"Analyse, Biographique / Exofiction, Historique, Philosophique, Satirique",454
-Octave Mirbeau,1848-01-01,1917-01-01,3,"Réalisme, Naturalism","Autobiographique / Autofiction, Satirique",138
-Guy de Maupassant,1850-01-01,1893-01-01,5,Réalisme,"Amour, Analyse, Autobiographique / Autofiction, Contes / Nouvelles",132
-Paul Bourget,1852-01-01,1935-01-01,11,inclassable,"Amour, Analyse",499
-Jules Renard,1864-01-01,1910-01-01,2,Réalisme,"Analyse, Autobiographique / Autofiction, Satirique",38
-Romain Rolland,1866-01-01,1944-01-01,9,Réalisme,"Amour, Analyse, Autobiographique / Autofiction, Bildungsroman, Biographique / Exofiction, Historique, Musique, Satirique, Épistolaire",517
-André Gide,1869-01-01,1951-01-01,3,inclassable,"Analyse, Autobiographique / Autofiction, Policier / Polar",73
-Marcel Proust,1871-01-01,1922-01-01,16,inclassable,"Amour, Analyse, Autobiographique / Autofiction",745
-Henri Barbusse,1873-01-01,1935-01-01,2,inclassable,"Autobiographique / Autofiction, Biographique / Exofiction, Guerre",77
-Roger Martin du Gard,1881-01-01,1958-01-01,1,inclassable,"Analyse, Historique",55
-François Mauriac,1885-01-01,1970-01-01,3,inclassable,"Amour, Analyse, Drame, Famille, Psychologique",57
-Alain-Fournier,1886-01-01,1914-01-01,1,inclassable,"Aventure, Bildungsroman",37
-Georges Bernanos,1888-01-01,1948-01-01,2,Existentialisme,"Analyse, Existentialisme, Spiritualité",60
+Name;birth_date;death_date;n_books;Mouvement;Genres;n_excerpts;WikiLangCount
+Charles Nodier;1780-01-01;1844-01-01;2;Romantisme;Fantastique, Gothique, Philosophique;38;46
+Stendhal;1783-01-01;1842-01-01;6;Réalisme;Psychologique, Amour, Social / Moeurs, Autobiographique / Autofiction;315;134
+Alfred de Vigny;1797-01-01;1863-01-01;3;Romantisme;Philosophique, Psychologique, Amour;121;75
+Honoré de Balzac;1799-01-01;1850-01-01;16;Réalisme;Amour, Social / Moeurs, Historique, Satirique;1760;170
+Alexandre Dumas;1802-01-01;1870-01-01;18;Romantisme;Amour, Aventure, Historique, Cape et d’épée;841;171
+Victor Hugo;1802-01-01;1885-01-01;13;Romantisme;Historique, Amour, Social / Moeurs, Satirique;720;258
+Prosper Mérimée;1803-01-01;1870-01-01;4;Romantisme;Amour, Fantastique, Psychologique, Aventure;119;93
+George Sand;1804-01-01;1876-01-01;55;Romantisme;Social / Moeurs, Amour, Autobiographique / Autofiction;2566;129
+Paul Féval;1816-01-01;1887-01-01;26;Romantisme;Aventure, Fantastique, Cape et d’épée, Policier / Polar;797;28
+Gustave Flaubert;1821-01-01;1880-01-01;9;Réalisme;Psychologique, Social / Moeurs, Amour;431;157
+Jules Verne;1828-01-01;01/01/1905;34;Proto SF;Science-Fiction, Aventure, Dystopique / Utopique;1695;183
+Ponson du Terrail;1829-01-01;1871-01-01;10;Romantisme;Policier / Polar, Aventure, Cape et d’épée, Amour;250;26
+Jules Vallès;1832-01-01;1885-01-01;2;Réalisme;Autobiographique / Autofiction, Social / Moeurs, Psychologique;100;36
+Alphonse Daudet;1840-01-01;1897-01-01;8;Réalisme;Social / Moeurs, Psychologique, Historique, Amour;276;105
+Émile Zola;1840-01-01;01/01/1902;23;Naturalisme;Social / Moeurs, Psychologique, Philosophique, Satirique;1811;163
+Anatole France;1844-01-01;01/01/1924;12;Roman Moderne;Philosophique, Satirique, Historique, Social / Moeurs;454;159
+Octave Mirbeau;1848-01-01;01/01/1917;3;Naturalisme;Autobiographique / Autofiction, Satirique, Social / Moeurs, Psychologique;138;162
+Guy de Maupassant;1850-01-01;1893-01-01;5;Réalisme;Psychologique, Fantastique, Social / Moeurs, Amour;132;150
+Paul Bourget;1852-01-01;01/01/1935;11;Décadentisme;Psychologique, Social / Moeurs, Philosophique, Amour;499;57
+Jules Renard;1864-01-01;01/01/1910;2;Réalisme;Autobiographique / Autofiction, Psychologique, Social / Moeurs, Satirique;38;69
+Romain Rolland;1866-01-01;01/01/1944;9;Réalisme;Historique, Philosophique, Social / Moeurs, Biographique / Exofiction;517;136
+André Gide;1869-01-01;01/01/1951;3;Symbolisme;Autobiographique / Autofiction, Psychologique, Philosophique, Satirique;73;139
+Marcel Proust;1871-01-01;01/01/1922;16;Roman Moderne;Amour, Psychologique, Autobiographique / Autofiction, Social / Moeurs;745;181
+Henri Barbusse;1873-01-01;01/01/1935;2;Prolétarien;Social / Moeurs, Psychologique;77;89
+Roger Martin du Gard;1881-01-01;01/01/1958;1;Réalisme;Social / Moeurs, Psychologique, Historique, Biographique / Exofiction;55;98
+François Mauriac;1885-01-01;01/01/1970;3;Catholicisme littéraire;Psychologique, Amour, Social / Moeurs, Philosophique;57;117
+Alain-Fournier;1886-01-01;01/01/1914;1;Romantisme;Aventure, Amour, Bildungsroman, Autobiographique / Autofiction;37;51
+Georges Bernanos;1888-01-01;01/01/1948;2;Catholicisme littéraire;Psychologique, Philosophique, Social / Moeurs, Autobiographique / Autofiction;60;62
